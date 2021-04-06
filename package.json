@@ -1,0 +1,32 @@
+{
+  "name": "midterm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brainthoughts/CS4-Midterm.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Brainthoughts/CS4-Midterm/issues"
+  },
+  "homepage": "https://github.com/Brainthoughts/CS4-Midterm#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
+    "passport": "^0.4.1",
+    "serve-favicon": "^2.5.0"
+  },
+  "devDependencies": {
+    "connect-flash": "^0.1.1",
+    "express-sanitizer": "^1.0.5",
+    "express-session": "^1.17.1"
+  }
+}
