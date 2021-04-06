@@ -2,7 +2,7 @@ const express = require("express"),
     router = express.Router()
 
 router.get("/", function (req, res) {
-    res.render(process.cwd() + "/views/index")
+    res.render("index/index", {levels: req.session.levels})
 })
 
 module.exports = router;
