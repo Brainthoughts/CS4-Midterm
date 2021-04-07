@@ -33,8 +33,10 @@ router.post("/:url", function (req, res) {
             }
         }
     }
-    if (!sucess)
+    if (!sucess) {
+        req.flash("error", "That ain't it chief");
         res.redirect(req.originalUrl)
+    }
 })
 
 module.exports = router;

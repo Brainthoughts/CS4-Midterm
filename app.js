@@ -5,6 +5,7 @@ const express = require("express"),
     session = require("express-session"),
     crypto = require("crypto"),
     logger = require("morgan"),
+    flash = require("connect-flash"),
     levels = require("./recources/levels")
 
 const indexRoutes = require("./routes/index.js"),
@@ -16,10 +17,12 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(favicon(__dirname + "/public/images/favicon.ico"));
 app.use(session({secret: 'averygoodsecret'}))
 app.use(logger("dev"));
+app.use(flash())
 
 
 //initialize session variables
 app.use(function (req, res, next) {
+    res.locals.flash = {success: req.flash("success"), info: req.flash("info"), error: req.flash("error")};
     if (req.session.levels){
         next()
     } else {
