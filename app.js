@@ -4,6 +4,7 @@ const express = require("express"),
     favicon = require("serve-favicon"),
     session = require("express-session"),
     crypto = require("crypto"),
+    logger = require("morgan"),
     levels = require("./recources/levels")
 
 const indexRoutes = require("./routes/index.js"),
@@ -14,6 +15,10 @@ app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(favicon(__dirname + "/public/images/favicon.ico"));
 app.use(session({secret: 'averygoodsecret'}))
+app.use(logger("dev"));
+
+
+//initialize session variables
 app.use(function (req, res, next) {
     if (req.session.levels){
         next()
@@ -21,7 +26,7 @@ app.use(function (req, res, next) {
         req.session.levels = levels;
         req.session.randNum = Math.random().toString()
         for (let i in req.session.levels) {
-            var shasum = crypto.createHash('sha1')
+            let shasum = crypto.createHash('sha1');
             shasum.update(i + req.session.randNum);
             req.session.levels[i].url = shasum.digest('hex')
             req.session.levels[i].id = i;

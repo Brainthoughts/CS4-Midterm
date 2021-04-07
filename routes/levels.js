@@ -7,12 +7,34 @@ router.get("/", function (req, res) {
 
 router.get("/:url", function (req, res) {
     let url = req.params.url;
-    for (let i in req.session.levels) {
-        if (req.session.levels[i].completed && req.session.levels[i].url === url){
-            res.render(`levels/level${i}`, {levels: req.session.levels})
+    let sucess = false;
+    for (let i = 0; i < req.session.levels.length; i++) {
+        if (req.session.levels[i].playable && req.session.levels[i].url === url){
+            res.render(`levels/level${i}`, {levels: req.session.levels, currentUrl: req.originalUrl})
+            sucess = true;
             break;
         }
     }
+    if (!sucess)
+        res.redirect("/");
+})
+
+router.post("/:url", function (req, res) {
+    let url = req.params.url;
+    let sucess = false;
+    for (let i = 0; i < req.session.levels.length; i++) {
+        if (req.session.levels[i].playable && req.session.levels[i].url === url){
+            if (i+1 < req.session.levels.length && req.session.levels[i+1].url === req.body.flag){
+                req.session.levels[i].completed = true;
+                req.session.levels[i+1].playable = true;
+                res.redirect(req.baseUrl + "/" + req.session.levels[i+1].url)
+                sucess = true;
+                break;
+            }
+        }
+    }
+    if (!sucess)
+        res.redirect(req.originalUrl)
 })
 
 module.exports = router;
