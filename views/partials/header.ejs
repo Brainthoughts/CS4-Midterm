@@ -28,13 +28,13 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <% for(var i = 0; i < levels.length ; i++) { %>
                             <% if (levels[i].playable && levels[i].completed) { %>
-                                <li><a class="dropdown-item bg-success"
+                                <li><a class="dropdown-item text-success"
                                        href="/level/<%- levels[i].url %>">Level <%- i %></a></li>
                             <% } else if (levels[i].playable) { %>
-                                <li><a class="dropdown-item bg-warning"
+                                <li><a class="dropdown-item text-warning"
                                        href="/level/<%- levels[i].url %>">Level <%- i %></a></li>
                             <% } else { %>
-                                <li><a class="dropdown-item bg-danger" href="#">Level
+                                <li><a class="dropdown-item text-danger" href="#">Level
                                         Not Unlocked
                                     </a></li>
                             <% break} %>
