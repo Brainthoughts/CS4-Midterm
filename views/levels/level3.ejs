@@ -2,9 +2,11 @@
 
 <div class="text-center">
     <h1>Level 3</h1>
-    <p>In between the eyes you will find truth.</p>
-    <%- locals.flag ? locals.flag :"" %>
+    <p>You bury me when I'm alive and dig me up when I die, what am I?</p>
+    <p><%- locals.flag ? locals.flag :"" %></p>
 </div>
+
+<%- include("../partials/answerForm") %>
 
 <%- include("../partials/flagForm") %>
 

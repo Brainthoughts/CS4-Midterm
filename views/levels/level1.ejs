@@ -4,11 +4,11 @@
     <br>
     <p>Find the flag. Oh look, there it is --> Oops! Looks like I dropped it</p>
     <br>
-    <% for (var i = 0; i < 100; i++) { %>
+    <%- include("../partials/flagForm") %>
+<% for (var i = 0; i < 100; i++) { %>
         <br>
     <% } %>
     <p><b><%- locals.levels[2].url %></b></p>
 </div>
-<%- include("../partials/flagForm") %>
 
 <%- include("../partials/footer") %>

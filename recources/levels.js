@@ -21,7 +21,8 @@ const levels = [
         completed: false,
         playable: false,
         url: null,
-        id: null
+        id: null,
+        answer: "plant"
     },
     {
         completed: false,

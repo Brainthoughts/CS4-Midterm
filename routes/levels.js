@@ -34,6 +34,7 @@ router.post("/:url", function (req, res) {
             else if (req.body.answer){
                 if (typeof req.body.answer === "string" && req.session.levels[i].answer && req.body.answer.toLowerCase().includes(req.session.levels[i].answer)){
                     res.render(`levels/level${i}`, { flag: req.session.levels[i+1].url})
+                    sucess = true;
                 }
             }
         }
