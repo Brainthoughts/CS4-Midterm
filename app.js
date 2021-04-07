@@ -24,6 +24,7 @@ app.use(flash())
 app.use(function (req, res, next) {
     res.locals.flash = {success: req.flash("success"), info: req.flash("info"), error: req.flash("error")};
     res.locals.currentUrl = req.originalUrl;
+    res.locals.admin = req.session.admin;
     if (req.session.levels) {
         res.locals.levels = req.session.levels;
         next()
