@@ -1,14 +1,14 @@
 <%- include("../partials/header") %>
-
-<h1 class="text-center">Level 1</h1>
-<br>
-<p class="text-center">Find the flag. Oh look, there it is -->
-Oops! Looks like I dropped it</p>
-<br>
-<% for (var i = 0; i < 100; i++) { %>
+<div class="text-center">
+    <h1>Level 1</h1>
     <br>
-<%}%>
-<p class="text-center"><b><%- levels[2].url %></b></p>
+    <p>Find the flag. Oh look, there it is --> Oops! Looks like I dropped it</p>
+    <br>
+    <% for (var i = 0; i < 100; i++) { %>
+        <br>
+    <% } %>
+    <p><b><%- levels[2].url %></b></p>
+</div>
 <%- include("../partials/flagForm") %>
 
 <%- include("../partials/footer") %>

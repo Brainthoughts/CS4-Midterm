@@ -17,6 +17,48 @@ const levels = [
         url: null,
         id: null
     },
+    {
+        completed: false,
+        playable: false,
+        url: null,
+        id: null
+    },
+    {
+        completed: false,
+        playable: false,
+        url: null,
+        id: null
+    },
+    {
+        completed: false,
+        playable: false,
+        url: null,
+        id: null
+    },
+    {
+        completed: false,
+        playable: false,
+        url: null,
+        id: null
+    },
+    {
+        completed: false,
+        playable: false,
+        url: null,
+        id: null
+    },
+    {
+        completed: false,
+        playable: false,
+        url: null,
+        id: null
+    },
+    {
+        completed: false,
+        playable: false,
+        url: null,
+        id: null
+    },
 ]
 
 module.exports = levels;
