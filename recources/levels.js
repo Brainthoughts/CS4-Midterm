@@ -1,13 +1,13 @@
 const levels = [
     {
-        completed: true,
+        completed: false,
         playable: true,
         url: null,
         id: null
     },
     {
         completed: false,
-        playable: true,
+        playable: false,
         url: false,
         id: null
     },
