@@ -1,6 +1,6 @@
 <br>
 <div class="w-25 position-absolute top-50 start-50 translate-middle">
-    <form action="<%- currentUrl %>" method="POST">
+    <form action="<%- locals.currentUrl %>" method="POST">
         <div class="mb-3">
             <input type="text" class="form-control" id="flag" name="flag" placeholder="Paste flag here and press enter">
             <div class="text-danger text-center"><%- flash.error %></div>

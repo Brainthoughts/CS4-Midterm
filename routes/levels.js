@@ -10,7 +10,7 @@ router.get("/:url", function (req, res) {
     let sucess = false;
     for (let i = 0; i < req.session.levels.length; i++) {
         if (req.session.levels[i].playable && req.session.levels[i].url === url){
-            res.render(`levels/level${i}`, {levels: req.session.levels, currentUrl: req.originalUrl})
+            res.render(`levels/level${i}`)
             sucess = true;
             break;
         }
@@ -24,12 +24,17 @@ router.post("/:url", function (req, res) {
     let sucess = false;
     for (let i = 0; i < req.session.levels.length; i++) {
         if (req.session.levels[i].playable && req.session.levels[i].url === url){
-            if (i+1 < req.session.levels.length && req.session.levels[i+1].url === req.body.flag){
+            if (req.body.flag && i+1 < req.session.levels.length && req.session.levels[i+1].url === req.body.flag){
                 req.session.levels[i].completed = true;
                 req.session.levels[i+1].playable = true;
                 res.redirect(req.baseUrl + "/" + req.session.levels[i+1].url)
                 sucess = true;
                 break;
+            }
+            else if (req.body.answer){
+                if (typeof req.body.answer === "string" && req.session.levels[i].answer && req.body.answer.toLowerCase().includes(req.session.levels[i].answer)){
+                    res.render(`levels/level${i}`, { flag: req.session.levels[i+1].url})
+                }
             }
         }
     }

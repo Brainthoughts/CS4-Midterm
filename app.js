@@ -23,7 +23,9 @@ app.use(flash())
 //initialize session variables
 app.use(function (req, res, next) {
     res.locals.flash = {success: req.flash("success"), info: req.flash("info"), error: req.flash("error")};
-    if (req.session.levels){
+    res.locals.currentUrl = req.originalUrl;
+    if (req.session.levels) {
+        res.locals.levels = req.session.levels;
         next()
     } else {
         req.session.levels = levels;
@@ -34,7 +36,8 @@ app.use(function (req, res, next) {
             req.session.levels[i].url = shasum.digest('hex')
             req.session.levels[i].id = i;
         }
-        console.log(req.session)
+        res.locals.levels = req.session.levels;
+        // console.log(req.session)
         next();
     }
 })
