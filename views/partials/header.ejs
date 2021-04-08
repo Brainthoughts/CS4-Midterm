@@ -27,13 +27,13 @@
                         Levels
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <% for(var i = 0; i < locals.levels.length ; i++) { %>
-                            <% if (locals.levels[i].playable && locals.levels[i].completed) { %>
+                        <% for(var i = 0; i < levels.length ; i++) { %>
+                            <% if (levels[i].playable && levels[i].completed) { %>
                                 <li><a class="dropdown-item text-success"
-                                       href="/level/<%- locals.levels[i].url %>">Level <%- i %></a></li>
-                            <% } else if (locals.levels[i].playable) { %>
+                                       href="/level/<%- levels[i].url %>">Level <%- i %></a></li>
+                            <% } else if (levels[i].playable) { %>
                                 <li><a class="dropdown-item text-warning"
-                                       href="/level/<%- locals.levels[i].url %>">Level <%- i %></a></li>
+                                       href="/level/<%- levels[i].url %>">Level <%- i %></a></li>
                             <% } else { %>
                                 <li><a class="dropdown-item text-danger" href="#">Level
                                         Not Unlocked
@@ -43,7 +43,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <% if (locals.admin) {%>
+                    <% if (admin) {%>
                         <a class="nav-link active" href="/admin">Reset</a>
                     <%} else {%>
                         <a class="nav-link active" href="/admin">Admin</a>

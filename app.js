@@ -36,6 +36,9 @@ app.use(function (req, res, next) {
             shasum.update(i + req.session.randNum);
             req.session.levels[i].url = shasum.digest('hex')
             req.session.levels[i].id = i;
+            if (!req.session.levels[i].hint){
+                req.session.levels[i].hint = "<i>Add Hint</i>"
+            }
         }
         res.locals.levels = req.session.levels;
         // console.log(req.session)

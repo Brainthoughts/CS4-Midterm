@@ -1,0 +1,16 @@
+<%- include("../partials/header") %>
+
+<div class="text-center">
+    <h1>Level 4</h1>
+    <p>The flag is on <span class="hover">me</span></p>
+    <p class="flag"></p>
+</div>
+<script>
+    $(".hover").hover(function () {
+        $(".flag").text("<%- levels[5].url%>")
+    })
+</script>
+
+<%- include("../partials/flagForm") %>
+
+<%- include("../partials/footer") %>

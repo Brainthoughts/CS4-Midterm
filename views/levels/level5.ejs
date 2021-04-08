@@ -1,0 +1,16 @@
+<%- include("../partials/header") %>
+
+<div class="text-center">
+    <h1>Level 5</h1>
+    <p>Tap tap!</p>
+    <p class="flag"></p>
+</div>
+<script>
+    $(document).dblclick(function () {
+        $(".flag").text("<%- levels[6].url%>")
+    })
+</script>
+
+<%- include("../partials/flagForm") %>
+
+<%- include("../partials/footer") %>
