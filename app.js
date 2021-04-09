@@ -15,7 +15,7 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(favicon(__dirname + "/public/images/favicon.ico"));
-app.use(session({secret: 'averygoodsecret'}))
+app.use(session({secret: "averygoodsecret", resave: false, saveUninitialized: false}))
 app.use(logger("dev"));
 app.use(flash())
 
@@ -29,6 +29,7 @@ app.use(function (req, res, next) {
         res.locals.levels = req.session.levels;
         next()
     } else {
+        // console.log("New session")
         req.session.levels = levels;
         req.session.randNum = Math.random().toString()
         for (let i in req.session.levels) {
@@ -48,4 +49,6 @@ app.use(function (req, res, next) {
 app.use("/", indexRoutes)
 app.use("/level", levelRoutes)
 
-app.listen(4006);
+app.listen(4006, function () {
+    console.log("Server started!")
+});

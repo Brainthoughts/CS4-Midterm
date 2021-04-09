@@ -47,7 +47,7 @@ const levels = [
         playable: false,
         url: null,
         id: null,
-        hint: "Nothing to see here"
+        hint: "Camouflage"
     },
     {
         completed: false,
