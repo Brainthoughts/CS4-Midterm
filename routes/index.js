@@ -3,7 +3,7 @@ const express = require("express"),
     levels = require("../recources/levels.js")
 
 router.get("/", function (req, res) {
-    res.render("index/index", {levels: req.session.levels})
+    res.render("index/index")
 })
 
 router.get("/admin", function (req, res) {
@@ -18,6 +18,14 @@ router.get("/admin", function (req, res) {
         req.session.levels = levels
     }
     res.redirect("/")
+})
+
+router.get("/congratulations", function (req, res) {
+    if (req.session.levels[req.session.levels.length-1].completed) {
+        res.render("index/congratulations")
+    } else {
+        res.redirect("/")
+    }
 })
 
 module.exports = router;

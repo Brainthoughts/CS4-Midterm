@@ -67,6 +67,14 @@ const levels = [
         url: null,
         id: null
     },
+    {
+        completed: false,
+        playable: false,
+        url: null,
+        id: null,
+        hint: "Try cheating",
+        flag: "We Win These"
+    },
 ]
 
 module.exports = levels;

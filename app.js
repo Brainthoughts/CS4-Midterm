@@ -29,10 +29,10 @@ app.use(function (req, res, next) {
         res.locals.levels = req.session.levels;
         next()
     } else {
-        // console.log("New session")
         req.session.levels = levels;
         req.session.randNum = Math.random().toString()
         for (let i in req.session.levels) {
+            i = parseInt(i);
             let shasum = crypto.createHash('sha1');
             shasum.update(i + req.session.randNum);
             req.session.levels[i].url = shasum.digest('hex')
@@ -40,9 +40,14 @@ app.use(function (req, res, next) {
             if (!req.session.levels[i].hint){
                 req.session.levels[i].hint = "<i>Add Hint</i>"
             }
+            if (i+1 === req.session.levels.length){
+                shasum = crypto.createHash('sha1');
+                shasum.update("LastLevel" + req.session.randNum);
+                req.session.levels[i].flag = shasum.digest('hex')
+            }
         }
+        console.log(req.session)
         res.locals.levels = req.session.levels;
-        // console.log(req.session)
         next();
     }
 })
