@@ -53,7 +53,8 @@ const levels = [
         completed: false,
         playable: false,
         url: null,
-        id: null
+        id: null,
+        hint: "Type it"
     },
     {
         completed: false,

@@ -1,10 +1,20 @@
 <%- include("../partials/header") %>
 
 <div class="text-center">
-    <h1>Level 6</h1>
+    <h1>Level 8</h1>
     <br>
-    <p>Find the flag. Oh look, there it is --> <span class="text-white"><%- levels[7].url %></span></p>
+    <p>Ask and you shall receive</p>
+    <p class="flag"></p>
 </div>
+<script>
+    let typed = ""
+    $(document).keypress(function (e) {
+        typed += e.key;
+        if (typed.includes("flag")) {
+            $(".flag").text("<%- levels[9].url %>")
+        }
+    })
+</script>
 <%- include("../partials/flagForm") %>
 
 <%- include("../partials/footer") %>

@@ -35,6 +35,12 @@ router.post("/:url", function (req, res) {
                     res.redirect("/congratulations")
                     success = true;
                 }
+                else {
+                    req.flash("error", req.session.levels[i].hint);
+                    res.redirect(req.originalUrl)
+                    success = true;
+                    break;
+                }
                 break;
             } else if (req.body.answer) {
                 if (typeof req.body.answer === "string" && req.session.levels[i].answer && req.body.answer.toLowerCase().includes(req.session.levels[i].answer)) {
