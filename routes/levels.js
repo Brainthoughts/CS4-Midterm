@@ -47,11 +47,12 @@ router.post("/:url", function (req, res) {
                     res.render(`levels/level${i}`, {flag: req.session.levels[i + 1].url})
                     success = true;
                 }
-                break;
-            } else {
-                req.flash("error", req.session.levels[i].hint);
-                res.redirect(req.originalUrl)
-                success = true;
+                else {
+                    req.flash("error", req.session.levels[i].hint);
+                    res.redirect(req.originalUrl)
+                    success = true;
+                    break;
+                }
                 break;
             }
         }
