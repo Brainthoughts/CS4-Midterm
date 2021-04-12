@@ -19,12 +19,18 @@ app.use(session({secret: "averygoodsecret", resave: false, saveUninitialized: fa
 app.use(logger("dev"));
 app.use(flash())
 
+let allowAdmin = process.env.allowAdmin;
+
 
 //initialize session variables
 app.use(function (req, res, next) {
     res.locals.flash = {success: req.flash("success"), info: req.flash("info"), error: req.flash("error")};
     res.locals.currentUrl = req.originalUrl;
     res.locals.admin = req.session.admin;
+    if (allowAdmin){
+        req.session.allowAdmin = true;
+        res.locals.allowAdmin = true
+    }
     if (req.session.levels) {
         res.locals.levels = req.session.levels;
         next()
@@ -56,4 +62,7 @@ app.use("/level", levelRoutes)
 
 app.listen(4006, function () {
     console.log("Server started!")
+    if (allowAdmin){
+        console.log("Debug on!")
+    }
 });

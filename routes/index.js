@@ -7,15 +7,17 @@ router.get("/", function (req, res) {
 })
 
 router.get("/admin", function (req, res) {
-    if (!req.session.admin) {
-        req.session.admin = true
-        for (let level of req.session.levels) {
-            level.completed = true;
-            level.playable = true;
+    if (req.session.allowAdmin) {
+        if (!req.session.admin) {
+            req.session.admin = true
+            for (let level of req.session.levels) {
+                level.completed = true;
+                level.playable = true;
+            }
+        } else {
+            req.session.admin = false
+            req.session.levels = levels
         }
-    } else {
-        req.session.admin = false
-        req.session.levels = levels
     }
     res.redirect("/")
 })
