@@ -54,13 +54,14 @@ const levels = [
         playable: false,
         url: null,
         id: null,
-        hint: "Type it"
+        hint: "Find \"Treasure\""
     },
     {
         completed: false,
         playable: false,
         url: null,
-        id: null
+        id: null,
+        hint: "Type it"
     },
     {
         completed: false,
