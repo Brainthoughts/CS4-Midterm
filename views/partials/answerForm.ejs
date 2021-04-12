@@ -1,6 +1,6 @@
 <br>
 <div class="d-flex justify-content-center">
-    <form action="<%- locals.currentUrl %>" method="POST">
+    <form id="answerForm" action="<%- locals.currentUrl %>" method="POST">
         <div class="mb-3">
             <input type="text" class="form-control" id="answer" name="answer" placeholder="Type answer here">
             <div class="text-danger text-center"><%- flash.info %></div>

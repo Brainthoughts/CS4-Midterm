@@ -1,10 +1,26 @@
 <%- include("../partials/header") %>
 
 <div class="text-center">
-    <h1>Level 6</h1>
+    <h1>Level 9</h1>
     <br>
-    <p>Find the flag. Oh look, there it is --> <span class="text-white"><%- levels[10].url %></span></p>
+    <p>Tick Tock</p>
+    <p class="flag"></p>
 </div>
+<script>
+    $(document).ready(function () {
+        $("#answerForm").submit(function (e) {
+            e.preventDefault(e);
+            let date = new Date()
+            let hours = (date.getHours() < 13) ? date.getHours(): date.getHours() - 12;
+            let minutes = date.getMinutes()
+            console.log(`${hours}:${minutes}`)
+            if ($("#answer").val() === `${hours}:${minutes}`) {
+                $(".flag").text("<%- levels[10].url %>")
+            }
+        })
+    })
+</script>
+<%- include("../partials/answerForm") %>
 
 <%- include("../partials/flagForm") %>
 
