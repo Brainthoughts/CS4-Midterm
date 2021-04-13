@@ -9,7 +9,8 @@ const express = require("express"),
     levels = require("./recources/levels")
 
 const indexRoutes = require("./routes/index.js"),
-    levelRoutes = require("./routes/levels.js")
+    levelRoutes = require("./routes/levels.js"),
+    challengeRoutes = require("./routes/challenges.js")
 
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
@@ -31,6 +32,9 @@ app.use(function (req, res, next) {
         req.session.allowAdmin = true;
         res.locals.allowAdmin = true
     }
+    if (req.session.challenge){
+        res.locals.challenge = req.session.challenge;
+    }
     if (req.session.levels) {
         res.locals.levels = req.session.levels;
         next()
@@ -43,6 +47,7 @@ app.use(function (req, res, next) {
             shasum.update(i + req.session.randNum);
             req.session.levels[i].url = shasum.digest('hex')
             req.session.levels[i].id = i;
+            req.session.levels[i].chCompleted = false;
             if (!req.session.levels[i].hint){
                 req.session.levels[i].hint = "<i>Add Hint</i>"
             }
@@ -59,6 +64,8 @@ app.use(function (req, res, next) {
 })
 app.use("/", indexRoutes)
 app.use("/level", levelRoutes)
+app.use("/challenge", challengeRoutes)
+
 
 app.listen(4006, function () {
     console.log("Server started!")
