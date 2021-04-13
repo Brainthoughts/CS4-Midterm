@@ -55,6 +55,12 @@ router.post("/:url", function (req, res) {
                 }
                 break;
             }
+            else {
+                req.flash("error", req.session.levels[i].hint);
+                res.redirect(req.originalUrl)
+                success = true;
+                break;
+            }
         }
     }
     if (!success) {
