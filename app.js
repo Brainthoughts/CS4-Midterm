@@ -17,7 +17,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(favicon(__dirname + "/public/images/favicon.ico"));
 app.use(session({secret: "averygoodsecret", resave: false, saveUninitialized: false}))
-app.use(logger("dev"));
+app.use(logger("common"));
 app.use(flash())
 
 let allowAdmin = process.env.allowAdmin;
