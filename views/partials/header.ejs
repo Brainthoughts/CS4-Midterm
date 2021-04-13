@@ -28,7 +28,10 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <% for(var i = 0; i < levels.length ; i++) { %>
-                            <% if (levels[i].playable && levels[i].completed) { %>
+                            <% if (levels[i].playable && levels[i].completed && levels[i].chCompleted) { %>
+                                <li><a class="dropdown-item text-info"
+                                       href="/level/<%- levels[i].url %>">Level <%- i %></a></li>
+                            <% } else if (levels[i].playable && levels[i].completed) { %>
                                 <li><a class="dropdown-item text-success"
                                        href="/level/<%- levels[i].url %>">Level <%- i %></a></li>
                             <% } else if (levels[i].playable) { %>
