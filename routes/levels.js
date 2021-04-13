@@ -26,6 +26,7 @@ router.post("/:url", function (req, res) {
         if (req.session.levels[i].playable && req.session.levels[i].url === url) {
             if (req.body.flag) {
                 if (i + 1 < req.session.levels.length && req.session.levels[i + 1].url === req.body.flag){
+                    req.session.levels[i].completed = true;
                     req.session.levels[i + 1].playable = true;
                     res.redirect(req.baseUrl + "/" + req.session.levels[i + 1].url)
                     success = true;
