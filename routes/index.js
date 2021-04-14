@@ -36,7 +36,7 @@ router.get("/congratulations", function (req, res) {
 })
 
 router.get("/hackme", function (req, res) {
-    res.render("")
+    res.render("index/hackme.js")
 })
 
 module.exports = router;
