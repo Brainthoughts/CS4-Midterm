@@ -15,10 +15,18 @@ router.get("/", function (req, res) {
     res.redirect(`/level/${req.session.levels[1].url}`)
 })
 
-//challenge 1 TODO
+//Challenge 1
 router.get("/coffee", function (req, res) {
     req.session.levels[1].chCompleted = true;
     res.redirect(`/level/${req.session.levels[2].url}`)
+
+})
+
+//Challenge 2
+router.post("/mates", function (req, res) {
+    req.session.levels[2].chCompleted = true;
+    res.end("Good Job, go to the next level")
+    // res.redirect(`/level/${req.session.levels[3].url}`)
 
 })
 
