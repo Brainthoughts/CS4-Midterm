@@ -35,5 +35,8 @@ router.get("/congratulations", function (req, res) {
     }
 })
 
+router.get("/hackme", function (req, res) {
+    res.render("")
+})
 
 module.exports = router;
