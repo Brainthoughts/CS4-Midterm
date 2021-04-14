@@ -11,10 +11,15 @@ router.use(function (req,res,next) {
 
 //Challenge 0
 router.get("/", function (req, res) {
+    req.session.levels[0].chCompleted = true;
     res.redirect(`/level/${req.session.levels[1].url}`)
 })
 
 //challenge 1 TODO
+router.get("/coffee", function (req, res) {
+    req.session.levels[1].chCompleted = true;
+    res.redirect(`/level/${req.session.levels[2].url}`)
 
+})
 
 module.exports = router;

@@ -28,12 +28,13 @@ router.get("/admin", function (req, res) {
 
 router.get("/congratulations", function (req, res) {
     if (req.session.levels[req.session.levels.length-1].completed) {
-        res.render("index/congratulations")
         req.session.challenge = true;
+        res.render("index/congratulations")
     } else {
         res.redirect("/")
     }
 })
+
 
 router.get("/hackme", function (req, res) {
     res.render("index/hackme")
