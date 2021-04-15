@@ -29,6 +29,10 @@ router.get("/admin", function (req, res) {
 router.get("/congratulations", function (req, res) {
     if (req.session.levels[req.session.levels.length-1].completed) {
         req.session.challenge = true;
+        let startTime = new Date(req.session.startTime)
+        let finishTime = new Date()
+        res.locals.timeTaken = (new Date(finishTime - startTime));
+        console.log(res.locals.timeTaken)
         res.render("index/congratulations")
     } else {
         res.redirect("/")
