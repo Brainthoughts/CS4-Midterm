@@ -3,7 +3,7 @@
     <form action="<%- locals.currentUrl %>" method="POST">
         <div class="mb-3">
             <input type="text" class="form-control" id="flag" name="flag" placeholder="Paste flag here and press enter">
-            <div class="text-danger text-center"><%- flash.error %></div>
+            <div id="hint" class="text-danger text-center"><%- flash.error %></div>
         </div>
     </form>
 </div>

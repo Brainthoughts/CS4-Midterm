@@ -10,6 +10,7 @@ router.get("/:url", function (req, res) {
     let sucess = false;
     for (let i = 0; i < req.session.levels.length; i++) {
         if (req.session.levels[i].playable && req.session.levels[i].url === url) {
+            res.locals.hint = req.session.levels[i].hint;
             res.render(`levels/level${i}`)
             sucess = true;
             break;
