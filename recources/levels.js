@@ -75,8 +75,8 @@ const levels = [
         playable: false,
         url: null,
         id: null,
-        hint: "Try cheating",
-        flag: "We Win These"
+        hint: "Inspect deeper",
+        flag: null
     },
 ]
 
