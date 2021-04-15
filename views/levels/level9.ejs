@@ -12,10 +12,11 @@
             e.preventDefault(e);
             let date = new Date()
             let hours = (date.getHours() < 13) ? date.getHours() : date.getHours() - 12;
-            let minutes = date.getMinutes()
+            let minutes = (date.getMinutes() > 9) ? date.getMinutes() : `0${date.getMinutes()}`;
             console.log(`${hours}:${minutes}`)
             if ($("#answer").val() === `${hours}:${minutes}`) {
                 $(".flag").text("<%- levels[10].url %>")
+                $("#answer").remove();
             } else {
                 $("#hint").text("<%- hint %>")
             }
