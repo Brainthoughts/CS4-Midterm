@@ -57,7 +57,6 @@ app.use(function (req, res, next) {
                 req.session.levels[i].flag = shasum.digest('hex')
             }
         }
-        console.log(req.session)
         res.locals.levels = req.session.levels;
         next();
     }

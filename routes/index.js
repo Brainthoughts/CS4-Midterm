@@ -20,7 +20,6 @@ router.get("/admin", function (req, res) {
             req.session.admin = false
             req.session.challenge = false;
             req.session.levels = levels
-            console.log(req.session)
         }
     }
     res.redirect("/")
@@ -31,8 +30,7 @@ router.get("/congratulations", function (req, res) {
         req.session.challenge = true;
         let startTime = new Date(req.session.startTime)
         let finishTime = new Date()
-        res.locals.timeTaken = (new Date(finishTime - startTime));
-        console.log(res.locals.timeTaken)
+        res.locals.timeTaken = (new Date(finishTime - startTime)); //This breaks if you take longer than an hour; "It's not a bug it's a feature"
         res.render("index/congratulations")
     } else {
         res.redirect("/")
