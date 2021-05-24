@@ -1,6 +1,7 @@
 const express = require("express"),
     router = express.Router(),
-    levels = require("../recources/levels.js")
+    levels = require("../recources/levels.js"),
+    time = require("../models/time")
 
 router.get("/", function (req, res) {
     res.render("index/index")
@@ -26,7 +27,7 @@ router.get("/admin", function (req, res) {
 })
 
 router.get("/congratulations", function (req, res) {
-    if (req.session.levels[req.session.levels.length-1].completed) {
+    if (req.session.levels[req.session.levels.length - 1].completed) {
         req.session.challenge = true;
         let startTime = new Date(req.session.startTime)
         let finishTime;
@@ -39,14 +40,21 @@ router.get("/congratulations", function (req, res) {
         res.locals.hours = finishTime.getHours() - startTime.getHours();
         res.locals.minutes = finishTime.getMinutes() - startTime.getMinutes();
         res.locals.seconds = finishTime.getSeconds() - startTime.getSeconds();
-        if (res.locals.seconds < 0){
+        if (res.locals.seconds < 0) {
             res.locals.seconds += 60;
             res.locals.minutes -= 1;
         }
-        if (res.locals.minutes < 0){
+        if (res.locals.minutes < 0) {
             res.locals.minutes += 60;
             res.locals.hours -= 1;
         }
+        time.create({
+            username: "Anonymous",
+            uuid: req.session.levels[req.session.levels.length - 1].flag,
+            hours: res.locals.hours,
+            minutes: res.locals.minutes,
+            seconds: res.locals.seconds
+        })
         res.render("index/congratulations")
     } else {
         res.redirect("/")

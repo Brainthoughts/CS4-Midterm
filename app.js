@@ -6,6 +6,7 @@ const express = require("express"),
     crypto = require("crypto"),
     logger = require("morgan"),
     flash = require("connect-flash"),
+    mongoose = require("mongoose"),
     levels = require("./recources/levels")
 
 const indexRoutes = require("./routes/index.js"),
@@ -13,6 +14,7 @@ const indexRoutes = require("./routes/index.js"),
     challengeRoutes = require("./routes/challenges.js")
 
 app.set("view engine", "ejs");
+mongoose.connect('mongodb://localhost/group6', {useNewUrlParser: true, useUnifiedTopology: true})
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(favicon(__dirname + "/public/images/favicon.ico"));
@@ -28,11 +30,11 @@ app.use(function (req, res, next) {
     res.locals.flash = {success: req.flash("success"), info: req.flash("info"), error: req.flash("error")};
     res.locals.currentUrl = req.originalUrl;
     res.locals.admin = req.session.admin;
-    if (allowAdmin){
+    if (allowAdmin) {
         req.session.allowAdmin = true;
         res.locals.allowAdmin = true
     }
-    if (req.session.challenge){
+    if (req.session.challenge) {
         res.locals.challenge = req.session.challenge;
     }
     if (req.session.levels) {
@@ -48,10 +50,10 @@ app.use(function (req, res, next) {
             req.session.levels[i].url = shasum.digest('hex')
             req.session.levels[i].id = i;
             req.session.levels[i].chCompleted = false;
-            if (!req.session.levels[i].hint){
+            if (!req.session.levels[i].hint) {
                 req.session.levels[i].hint = "<i>Add Hint</i>"
             }
-            if (i+1 === req.session.levels.length){
+            if (i + 1 === req.session.levels.length) {
                 shasum = crypto.createHash('sha1');
                 shasum.update("LastLevel" + req.session.randNum);
                 req.session.levels[i].flag = shasum.digest('hex')
@@ -68,7 +70,7 @@ app.use("/challenge", challengeRoutes)
 
 app.listen(4006, function () {
     console.log("Server started!")
-    if (allowAdmin){
+    if (allowAdmin) {
         console.log("Debug on!")
     }
 });
