@@ -27,20 +27,30 @@ router.get("/admin", function (req, res) {
     res.redirect("/")
 })
 
+router.get("/leaderboard", function (req, res) {
+    time.find().sort({time: 1}).exec(function (err, docs) {
+        console.log(docs)
+        res.locals.times = docs
+        res.render("index/leaderboard")
+    })
+})
+
 router.get("/congratulations", function (req, res) {
     if (req.session.levels[req.session.levels.length - 1].completed) {
         req.session.challenge = true;
-        let startTime = new Date(req.session.startTime)
+        let startTime = req.session.startTime
         let finishTime;
         if (!req.session.finishTime) {
-            finishTime = new Date()
+            finishTime = new Date().getTime()
             req.session.finishTime = finishTime
         } else {
-            finishTime = new Date(req.session.finishTime)
+            finishTime = req.session.finishTime
         }
-        res.locals.hours = finishTime.getHours() - startTime.getHours();
-        res.locals.minutes = finishTime.getMinutes() - startTime.getMinutes();
-        res.locals.seconds = finishTime.getSeconds() - startTime.getSeconds();
+        let timeTaken = new Date(finishTime - startTime);
+        console.log(timeTaken)
+        res.locals.hours = timeTaken.getHours() - 16;
+        res.locals.minutes = timeTaken.getMinutes();
+        res.locals.seconds = timeTaken.getSeconds();
         if (res.locals.seconds < 0) {
             res.locals.seconds += 60;
             res.locals.minutes -= 1;
@@ -52,9 +62,7 @@ router.get("/congratulations", function (req, res) {
         time.create({
             username: "Anonymous",
             uuid: req.session.levels[req.session.levels.length - 1].flag,
-            hours: res.locals.hours,
-            minutes: res.locals.minutes,
-            seconds: res.locals.seconds
+            time: timeTaken
         })
         res.render("index/congratulations")
     } else {

@@ -3,6 +3,28 @@
 <br>
 <h1 class="text-center">Welcome to Treasure Hunt Leader Board!</h1>
 <br>
-<p class="text-center">Here you can see the top times of the people that have completed the Treasure Hunt</p>
-
+<div class="row justify-content-center">
+    <div class="w-50">
+        <table class="table table-responsive">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Time</th>
+                <th scope="col">Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% for (let time of times) {
+                let date = new Date(time.time)
+            %>
+            <tr>
+                <th scope="row"><%- times.indexOf(time) + 1 %></th>
+                <td><%- date.getHours() - 16 %>:<%- date.getMinutes() %>:<%- date.getSeconds() %></td>
+                <td><%- time.username %></td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
 <%- include("../partials/footer") %>
