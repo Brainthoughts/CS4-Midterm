@@ -1,4 +1,5 @@
 const express = require("express"),
+    { body } = require('express-validator');
     router = express.Router(),
     levels = require("../recources/levels.js"),
     time = require("../models/time")
@@ -56,6 +57,16 @@ router.get("/congratulations", function (req, res) {
             seconds: res.locals.seconds
         })
         res.render("index/congratulations")
+    } else {
+        res.redirect("/")
+    }
+})
+
+router.post("/congratulations", body("answer").escape(), function (req, res) {
+    if (req.session.levels[req.session.levels.length - 1].completed) {
+        time.findOneAndUpdate({uuid: req.session.levels[req.session.levels.length - 1].flag}, {username: req.body.answer}, function () {
+            res.redirect("/leaderboard")
+        })
     } else {
         res.redirect("/")
     }
