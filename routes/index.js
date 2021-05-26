@@ -58,10 +58,15 @@ router.get("/congratulations", function (req, res) {
             res.locals.minutes += 60;
             res.locals.hours -= 1;
         }
-        time.create({
-            username: "Anonymous",
-            uuid: req.session.levels[req.session.levels.length - 1].flag,
-            time: timeTaken
+        time.findOne({uuid: req.session.levels[req.session.levels.length - 1].flag}, function (err, doc) {
+            console.log(doc)
+            if (!doc) {
+                time.create({
+                    username: "Anonymous",
+                    uuid: req.session.levels[req.session.levels.length - 1].flag,
+                    time: timeTaken
+                })
+            }
         })
         res.render("index/congratulations")
     } else {
