@@ -29,7 +29,6 @@ router.get("/admin", function (req, res) {
 
 router.get("/leaderboard", function (req, res) {
     time.find().sort({time: 1}).exec(function (err, docs) {
-        console.log(docs)
         res.locals.times = docs
         res.render("index/leaderboard")
     })
@@ -41,7 +40,7 @@ router.get("/congratulations", function (req, res) {
         let startTime = req.session.startTime
         let finishTime;
         if (!req.session.finishTime) {
-            finishTime = new Date().getTime()
+            finishTime = Date.now()
             req.session.finishTime = finishTime
         } else {
             finishTime = req.session.finishTime

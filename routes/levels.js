@@ -11,7 +11,7 @@ router.get("/:url", function (req, res) {
     for (let i = 0; i < req.session.levels.length; i++) {
         if (req.session.levels[i].playable && req.session.levels[i].url === url) {
             if (0 === i && !req.session.startTime){
-                req.session.startTime = new Date().getTime()
+                req.session.startTime = Date.now()
                 console.log(req.session.startTime)
             }
             res.locals.hint = req.session.levels[i].hint;
