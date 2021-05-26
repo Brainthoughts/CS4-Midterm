@@ -47,9 +47,9 @@ router.get("/congratulations", function (req, res) {
         }
         let timeTaken = new Date(finishTime - startTime);
         console.log(timeTaken)
-        res.locals.hours = timeTaken.getHours() - 16;
-        res.locals.minutes = timeTaken.getMinutes();
-        res.locals.seconds = timeTaken.getSeconds();
+        res.locals.hours = timeTaken.getUTCHours();
+        res.locals.minutes = timeTaken.getUTCMinutes();
+        res.locals.seconds = timeTaken.getUTCSeconds();
         if (res.locals.seconds < 0) {
             res.locals.seconds += 60;
             res.locals.minutes -= 1;
