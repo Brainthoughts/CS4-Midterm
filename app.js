@@ -7,7 +7,8 @@ const express = require("express"),
     logger = require("morgan"),
     flash = require("connect-flash"),
     mongoose = require("mongoose"),
-    levels = require("./recources/levels")
+    levels = require("./recources/levels"),
+    challenges = require("./recources/challenges")
 
 const indexRoutes = require("./routes/index.js"),
     levelRoutes = require("./routes/levels.js"),
@@ -36,9 +37,13 @@ app.use(function (req, res, next) {
     }
     if (req.session.challenge) {
         res.locals.challenge = req.session.challenge;
+    } else {
+        res.locals.challenge = false
     }
     if (req.session.levels) {
         res.locals.levels = req.session.levels;
+        res.locals.challenges = req.session.challenges;
+        res.locals.token = req.session.token
         next()
     } else {
         req.session.levels = levels;
@@ -46,10 +51,9 @@ app.use(function (req, res, next) {
         for (let i in req.session.levels) {
             i = parseInt(i);
             let shasum = crypto.createHash('sha1');
-            shasum.update(i + req.session.randNum);
+            shasum.update("level" + i + req.session.randNum);
             req.session.levels[i].url = shasum.digest('hex')
             req.session.levels[i].id = i;
-            req.session.levels[i].chCompleted = false;
             if (!req.session.levels[i].hint) {
                 req.session.levels[i].hint = "<i>Add Hint</i>"
             }
@@ -60,6 +64,27 @@ app.use(function (req, res, next) {
             }
         }
         res.locals.levels = req.session.levels;
+        req.session.challenges = challenges
+        for (let i in req.session.challenges) {
+            i = parseInt(i);
+            let shasum = crypto.createHash('sha1');
+            shasum.update("challenge" + i + req.session.randNum);
+            req.session.challenges[i].url = shasum.digest('hex')
+            req.session.challenges[i].id = i;
+            if (!req.session.challenges[i].hint) {
+                req.session.challenges[i].hint = "<i>Add Hint</i>"
+            }
+            if (i + 1 === req.session.challenges.length) {
+                shasum = crypto.createHash('sha1');
+                shasum.update("LastChallenge" + req.session.randNum);
+                req.session.challenges[i].flag = shasum.digest('hex')
+            }
+        }
+        res.locals.challenges = req.session.challenges
+        let shasum = crypto.createHash('sha1');
+        shasum.update("token" + req.session.randNum);
+        req.session.token = shasum.digest('hex')
+        res.locals.token = req.session.token
         next();
     }
 })

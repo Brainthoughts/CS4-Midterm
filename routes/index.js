@@ -1,8 +1,10 @@
 const express = require("express"),
-    { body } = require('express-validator');
+    {body} = require('express-validator'),
     router = express.Router(),
-    levels = require("../recources/levels.js"),
-    time = require("../models/time")
+    levels = require("../recources/levels"),
+    challenges = require("../recources/challenges"),
+    time = require("../models/time"),
+    progress = require("../models/progress")
 
 router.get("/", function (req, res) {
     res.render("index/index")
@@ -16,12 +18,16 @@ router.get("/admin", function (req, res) {
             for (let level of req.session.levels) {
                 level.completed = true;
                 level.playable = true;
-                level.chCompleted = true;
+            }
+            for (let challenge of req.session.challenges) {
+                challenge.completed = true;
+                challenge.playable = true;
             }
         } else {
             req.session.admin = false
             req.session.challenge = false;
             req.session.levels = levels
+            req.session.challenges = challenges
         }
     }
     res.redirect("/")
@@ -58,12 +64,11 @@ router.get("/congratulations", function (req, res) {
             res.locals.minutes += 60;
             res.locals.hours -= 1;
         }
-        time.findOne({uuid: req.session.levels[req.session.levels.length - 1].flag}, function (err, doc) {
-            console.log(doc)
+        time.findOne({uuid: req.session.token}, function (err, doc) {
             if (!doc) {
                 time.create({
                     username: "Anonymous",
-                    uuid: req.session.levels[req.session.levels.length - 1].flag,
+                    uuid: req.session.token,
                     time: timeTaken
                 })
             }
@@ -76,7 +81,7 @@ router.get("/congratulations", function (req, res) {
 
 router.post("/congratulations", body("answer").escape(), function (req, res) {
     if (req.session.levels[req.session.levels.length - 1].completed) {
-        time.findOneAndUpdate({uuid: req.session.levels[req.session.levels.length - 1].flag}, {username: req.body.answer}, function () {
+        time.findOneAndUpdate({uuid: req.session.token}, {username: req.body.answer}, function () {
             res.redirect("/leaderboard")
         })
     } else {
@@ -84,6 +89,37 @@ router.post("/congratulations", body("answer").escape(), function (req, res) {
     }
 })
 
+router.get("/progress", function (req, res) {
+    res.render("index/progress")
+    progress.findOneAndUpdate({token: req.session.token}, {session: req.session}, function (err, doc) {
+        if (err) {
+            console.log(err)
+        }
+        if (!doc) {
+            progress.create({token: req.session.token, session: req.session})
+        }
+    })
+})
+
+router.post("/progress", function (req, res) {
+    progress.findOne({token: req.body.flag}, function (err, doc) {
+        if (err) {
+            console.log(err)
+        }
+        if (!doc){
+            req.flash("error", "No save was found for that token!")
+            res.render("index/progress")
+        }
+        else {
+            req.session.levels = doc.session.levels
+            req.session.randNum = doc.session.randNum
+            req.session.token = doc.session.token
+            req.session.challenges = doc.session.challenges
+
+            res.render("index/index")
+        }
+    })
+})
 
 router.get("/hackme", function (req, res) {
     res.render("index/hackme")

@@ -24,8 +24,11 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/leaderboard">Leaderboard</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/progress">Progress</a>
+                </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    <a class="nav-link active dropdown-toggle" href="#" id="levelDropdown" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
                         Levels
                     </a>
@@ -48,6 +51,32 @@
                         <% } %>
                     </ul>
                 </li>
+                <% if (challenge) { %>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link active dropdown-toggle" href="#" id="challengeDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Challenges
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <% for(var i = 0; i < challenges.length ; i++) { %>
+                                <% if (challenges[i].playable && challenges[i].completed && challenges[i].chCompleted) { %>
+                                    <li><a class="dropdown-item text-info"
+                                           href="/challenge/<%- challenges[i].url %>">Challenge <%- i %></a></li>
+                                <% } else if (challenges[i].playable && challenges[i].completed) { %>
+                                    <li><a class="dropdown-item text-success"
+                                           href="/challenge/<%- challenges[i].url %>">Challenge <%- i %></a></li>
+                                <% } else if (challenges[i].playable) { %>
+                                    <li><a class="dropdown-item text-warning"
+                                           href="/challenge/<%- challenges[i].url %>">Challenge <%- i %></a></li>
+                                <% } else { %>
+                                    <li><a class="dropdown-item text-danger" href="#">Challenge
+                                            Not Unlocked
+                                        </a></li>
+                                <% break} %>
+                            <% } %>
+                        </ul>
+                    </li>
+                <% } %>
                 <li class="nav-item">
                     <% if (locals.allowAdmin) { %>
                         <% if (admin) { %>
