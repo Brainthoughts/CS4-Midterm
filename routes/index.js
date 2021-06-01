@@ -115,8 +115,7 @@ router.post("/progress", function (req, res) {
             req.session.randNum = doc.session.randNum
             req.session.token = doc.session.token
             req.session.challenges = doc.session.challenges
-
-            res.render("index/index")
+            res.redirect("/")
         }
     })
 })
