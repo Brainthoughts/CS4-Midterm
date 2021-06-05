@@ -17,11 +17,11 @@
     <h6 id="name"><%- name %></h6>
     <table class="table-bordered position-relative start-50 translate-middle-x">
         <% for (let i = 0; i < 9; i++) { %>
+            <%- i!==0 && i%3===0 ? `<tr class=\"bg-dark\"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>` : null %>
             <tr class="">
                 <% for (let j = 0; j < 9; j++) { %>
+                    <%- j!==0 && j%3===0 ? "<td class=\"bg-dark\"></td>" : null %>
                 <td class="">
-                    <%- i!==0 && i%3===0 ? "" : null %>
-                    <%- j!==0 && j%3===0 ? "" : null %>
                     <input class="text-center" type="number" min="1" max="9"
                            id="<%- `${i}-${j}` %>"<%- board[i][j] !== 0 ? `value=\"${board[i][j]}\" disabled` : null %>>
                 </td>
@@ -35,7 +35,7 @@
         <input type="text" placeholder="Room code" id="codeField" name="roomid">
     </form>
     <br>
-    <p>Your room code: <b><%- code %></b></p>
+    <p>Your room code: <b id="code"><%- code %></b></p><button id="copy">Copy link</button>
     <form action="/sudoku/new" method="post">
         <input type="submit" value="New Game">
     </form>
@@ -89,7 +89,6 @@
         }, 5000)
     })
 
-
     $("input[type=number]").on('keypress', function (e) {
         if (e.key === "Enter" && !disabled) {
             socket.emit("submit", {
@@ -100,5 +99,11 @@
             $(this).val(null)
         }
     });
+    $("#copy").click(function () {
+        let copyText = document.getElementById("code");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+    })
 </script>
 <%- include("../partials/footer") %>

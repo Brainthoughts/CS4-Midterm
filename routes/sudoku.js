@@ -41,7 +41,15 @@ router.use(function (req, res, next) {
 
 
 router.get("/", function (req, res) {
-    res.render("sudoku/play")
+    if (req.query.room &&rooms[req.query.room]){
+        req.session.roomid = req.body.roomid
+        rooms[req.session.roomid].players.push(req.session.playerid)
+        players[req.session.playerid].name = "Player-" + rooms[req.session.roomid].players.length
+        players[req.session.playerid].points = 0
+        res.redirect("/sudoku")
+    }
+    else
+        res.render("sudoku/play")
 })
 
 router.post("/join", function (req, res) {
@@ -61,7 +69,7 @@ router.post("/new", function (req, res) {
     res.redirect("/sudoku")
 })
 module.exports = [router,
-    function f(io) {
+    function (io) {
     io.on("connection", function (socket) {
         socket.on("join", function () {
             socket.join(socket.handshake.session.roomid)
@@ -76,7 +84,6 @@ module.exports = [router,
                 if (rooms[roomid].isComplete()) {
                     let winner = null;
                     for (const playerid of rooms[roomid].players) {
-                        console.log(players[playerid])
                         if (!winner || winner.points < players[playerid].points)
                             winner = players[playerid]
                     }
