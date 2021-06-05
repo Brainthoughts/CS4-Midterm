@@ -2,29 +2,38 @@ const express = require("express"),
     app = express(),
     bodyParser = require("body-parser"),
     favicon = require("serve-favicon"),
-    session = require("express-session"),
+    session = require("express-session")({secret: "averygoodsecret", resave: false, saveUninitialized: false}),
     crypto = require("crypto"),
     logger = require("morgan"),
     flash = require("connect-flash"),
+    http = require('http'),
+    server = http.createServer(app),
+    {Server} = require("socket.io"),
+    io = new Server(server),
+    sharedsession = require("express-socket.io-session"),
     mongoose = require("mongoose"),
     levels = require("./recources/levels"),
-    challenges = require("./recources/challenges")
+    challenges = require("./recources/challenges");
 
 const indexRoutes = require("./routes/index.js"),
     levelRoutes = require("./routes/levels.js"),
-    challengeRoutes = require("./routes/challenges.js")
+    challengeRoutes = require("./routes/challenges.js"),
+    sudokuRoutes = require("./routes/sudoku.js")[0]
 
 app.set("view engine", "ejs");
 mongoose.connect('mongodb://localhost/group6', {useNewUrlParser: true, useUnifiedTopology: true})
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(favicon(__dirname + "/public/images/favicon.ico"));
-app.use(session({secret: "averygoodsecret", resave: false, saveUninitialized: false}))
+app.use(session)
 app.use(logger("common"));
 app.use(flash())
+io.use(sharedsession(session, {
+    autoSave:true
+}));
+require('./routes/sudoku')[1](io);
 
 let allowAdmin = process.env.allowAdmin;
-
 
 //initialize session variables
 app.use(function (req, res, next) {
@@ -91,9 +100,10 @@ app.use(function (req, res, next) {
 app.use("/", indexRoutes)
 app.use("/level", levelRoutes)
 app.use("/challenge", challengeRoutes)
+app.use("/sudoku", sudokuRoutes)
 
 
-app.listen(4006, function () {
+server.listen(4006, function () {
     console.log("Server started!")
     if (allowAdmin) {
         console.log("Debug on!")
