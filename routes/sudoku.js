@@ -25,7 +25,7 @@ router.use(function (req, res, next) {
         let player = new Player(uuidv4(), 0, "Player")
         players[player.id] = player;
         req.session.playerid = player.id
-        let room = new Room(board, null, uuidv4())
+        let room = new Room(null, null, uuidv4())
         rooms[room.id] = room
         rooms[room.id].players.push(req.session.playerid)
         players[req.session.playerid].name = "Player-" + rooms[room.id].players.length
