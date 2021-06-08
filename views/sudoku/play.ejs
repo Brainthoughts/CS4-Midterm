@@ -15,16 +15,18 @@
 </style>
 <div class="container text-center justify-content-md-center">
     <h6 id="name"><%- name %></h6>
+    <p>Don't forget to hit enter to submit your number</p>
+    <p class="text-danger"><%- flash.error %></p>
     <table class="table-bordered position-relative start-50 translate-middle-x">
         <% for (let i = 0; i < 9; i++) { %>
-            <%- i!==0 && i%3===0 ? `<tr class=\"bg-dark\"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>` : null %>
+            <%- i !== 0 && i % 3 === 0 ? `<tr class=\"bg-dark\"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>` : null %>
             <tr class="">
                 <% for (let j = 0; j < 9; j++) { %>
-                    <%- j!==0 && j%3===0 ? "<td class=\"bg-dark\"></td>" : null %>
-                <td class="">
-                    <input class="text-center" type="number" min="1" max="9"
-                           id="<%- `${i}-${j}` %>"<%- board[i][j] !== 0 ? `value=\"${board[i][j]}\" disabled` : null %>>
-                </td>
+                    <%- j !== 0 && j % 3 === 0 ? "<td class=\"bg-dark\"></td>" : null %>
+                    <td class="">
+                        <input class="text-center" type="number" min="1" max="9"
+                               id="<%- `${i}-${j}` %>"<%- board[i][j] !== 0 ? `value=\"${board[i][j]}\" disabled` : null %>>
+                    </td>
                 <% } %>
             </tr>
         <% } %>
@@ -35,9 +37,12 @@
         <input type="text" placeholder="Room code" id="codeField" name="roomid">
     </form>
     <br>
-    <p>Your room code: <b id="code"><%- code %></b></p><button id="copy">Copy link</button>
+    <p>Your room code: <b id="code"><%- code %></b></p>
+    <button id="copy" class="btn btn-outline-dark">Copy link</button>
+    <br>
+    <br>
     <form action="/sudoku/new" method="post">
-        <input type="submit" value="New Game">
+        <input type="submit" value="New Game" class="btn btn-outline-dark">
     </form>
     <br>
 </div>
@@ -66,10 +71,12 @@
 
     socket.on("win", function (data) {
         $("td").each(function () {
-            if ($("#name").text()===data.name)
-                $(this).addClass("bg-success")
-            else
-                $(this).addClass("bg-danger")
+            if ($(this).attr("class") !== "bg-dark" && $(this).parent().attr("class") !== "bg-dark") {
+                if ($("#name").text() === data.name)
+                    $(this).addClass("bg-success")
+                else
+                    $(this).addClass("bg-danger")
+            }
         })
         alert(`${data.name} has won with ${data.points} points`)
     })
@@ -100,10 +107,13 @@
         }
     });
     $("#copy").click(function () {
-        let copyText = document.getElementById("code");
-        copyText.select();
-        copyText.setSelectionRange(0, 99999);
-        document.execCommand("copy");
+        let text = $("#code").text();
+        var data = [new ClipboardItem({"text/plain": new Blob([window.location.href + "?room=" + text], {type: "text/plain"})})];
+        navigator.clipboard.write(data).then(function () {
+            console.log("Copied to clipboard successfully!");
+        }, function () {
+            console.error("Unable to write to clipboard. :-(");
+        });
     })
 </script>
 <%- include("../partials/footer") %>

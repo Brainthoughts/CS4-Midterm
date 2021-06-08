@@ -13,7 +13,6 @@ router.get("/:url", function (req, res) {
             if (0 === i && !req.session.startTime){
                 req.session.startTime = Date.now()
             }
-            res.locals.hint = req.session.levels[i].hint;
             res.render(`levels/level${i}`)
             success = true;
             break;

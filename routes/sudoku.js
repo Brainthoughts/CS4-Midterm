@@ -20,13 +20,12 @@ let board = [
 ]
 
 router.use(function (req, res, next) {
-    res.locals.flash = {success: req.flash("success"), info: req.flash("info"), error: req.flash("error")};
     if (!req.session.playerid || !req.session.roomid || req.session.restart) {
         req.session.restart = false;
         let player = new Player(uuidv4(), 0, "Player")
         players[player.id] = player;
         req.session.playerid = player.id
-        let room = new Room(null, null, uuidv4())
+        let room = new Room(board, null, uuidv4())
         rooms[room.id] = room
         rooms[room.id].players.push(req.session.playerid)
         players[req.session.playerid].name = "Player-" + rooms[room.id].players.length
@@ -41,15 +40,26 @@ router.use(function (req, res, next) {
 
 
 router.get("/", function (req, res) {
-    if (req.query.room &&rooms[req.query.room]){
-        req.session.roomid = req.body.roomid
-        rooms[req.session.roomid].players.push(req.session.playerid)
-        players[req.session.playerid].name = "Player-" + rooms[req.session.roomid].players.length
-        players[req.session.playerid].points = 0
+    if (req.query.room){
+        if (req.query.room !== req.session.roomid && rooms[req.query.room]) {
+            console.log(rooms[req.query.room])
+            req.session.roomid = req.query.room
+            console.log(rooms[req.session.roomid])
+            rooms[req.session.roomid].players.push(req.session.playerid)
+            players[req.session.playerid].name = "Player-" + rooms[req.session.roomid].players.length
+            players[req.session.playerid].points = 0
+        }
+        else {
+            if (req.query.room === req.session.roomid)
+                req.flash("error", "You are already in this room");
+            else
+                req.flash("error", "Invalid room");
+        }
         res.redirect("/sudoku")
     }
-    else
+    else {
         res.render("sudoku/play")
+    }
 })
 
 router.post("/join", function (req, res) {
