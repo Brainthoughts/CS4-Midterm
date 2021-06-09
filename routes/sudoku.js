@@ -35,29 +35,29 @@ router.use(function (req, res, next) {
     res.locals.board = rooms[req.session.roomid].board
     res.locals.code = req.session.roomid
     res.locals.name = players[req.session.playerid].name
+    res.locals.players = []
+    for (let playerid of rooms[req.session.roomid].players) {
+        res.locals.players.push(players[playerid])
+    }
     next();
 })
 
 
 router.get("/", function (req, res) {
-    if (req.query.room){
+    if (req.query.room) {
         if (req.query.room !== req.session.roomid && rooms[req.query.room]) {
-            console.log(rooms[req.query.room])
             req.session.roomid = req.query.room
-            console.log(rooms[req.session.roomid])
             rooms[req.session.roomid].players.push(req.session.playerid)
             players[req.session.playerid].name = "Player-" + rooms[req.session.roomid].players.length
             players[req.session.playerid].points = 0
-        }
-        else {
+        } else {
             if (req.query.room === req.session.roomid)
                 req.flash("error", "You are already in this room");
             else
                 req.flash("error", "Invalid room");
         }
         res.redirect("/sudoku")
-    }
-    else {
+    } else {
         res.render("sudoku/play")
     }
 })
@@ -80,32 +80,58 @@ router.post("/new", function (req, res) {
 })
 module.exports = [router,
     function (io) {
-    io.on("connection", function (socket) {
-        socket.on("join", function () {
-            socket.join(socket.handshake.session.roomid)
-        })
-        socket.on("submit", function (data) {
-            let roomid = socket.handshake.session.roomid;
-            if (parseInt(data.number) === rooms[roomid].solution[data.row][data.col]) {
-                socket.to(roomid).emit("update", {row: data.row, col: data.col, number: data.number, self: false})
-                socket.emit("update", {row: data.row, col: data.col, number: data.number, self: true})
-                rooms[roomid].board[data.row][data.col] = parseInt(data.number)
-                players[socket.handshake.session.playerid].points++;
-                if (rooms[roomid].isComplete()) {
-                    let winner = null;
-                    for (const playerid of rooms[roomid].players) {
-                        if (!winner || winner.points < players[playerid].points)
-                            winner = players[playerid]
-                    }
-                    io.to(roomid).emit("win", {name: winner.name, points: winner.points})
+        io.on("connection", function (socket) {
+            socket.on("join", function () {
+                if (!socket.rooms.has(socket.handshake.session.roomid)) {
+                    socket.join(socket.handshake.session.roomid)
+                    let roomid = socket.handshake.session.roomid;
+                    socket.to(roomid).emit("playerJoin", {
+                        name: players[socket.handshake.session.playerid].name,
+                        points: players[socket.handshake.session.playerid].points
+                    })
                 }
-            } else {
-                socket.emit("fail", {row: data.row, col: data.col})
-                rooms[roomid].disabled.push(socket.id)
-                setTimeout(function () {
-                    rooms[roomid].disabled.splice(rooms[roomid].disabled.indexOf(socket.id), 1)
-                }, 5000)
-            }
+            })
+            socket.on("submit", function (data) {
+                let roomid = socket.handshake.session.roomid;
+                if (parseInt(data.number) === rooms[roomid].solution[data.row][data.col]) {
+                    players[socket.handshake.session.playerid].points++;
+                    socket.to(roomid).emit("update", {
+                        row: data.row,
+                        col: data.col,
+                        number: data.number,
+                        name: players[socket.handshake.session.playerid].name,
+                        points: players[socket.handshake.session.playerid].points,
+                        self: false
+                    })
+                    socket.emit("update", {
+                        row: data.row,
+                        col: data.col,
+                        number: data.number,
+                        name: players[socket.handshake.session.playerid].name,
+                        points: players[socket.handshake.session.playerid].points,
+                        self: true
+                    })
+                    rooms[roomid].board[data.row][data.col] = parseInt(data.number)
+                    if (rooms[roomid].isComplete()) {
+                        let winner = null;
+                        for (const playerid of rooms[roomid].players) {
+                            if (!winner || winner.points < players[playerid].points)
+                                winner = players[playerid]
+                        }
+                        io.to(roomid).emit("win", {name: winner.name, points: winner.points})
+                    }
+                } else {
+                    socket.emit("fail", {row: data.row, col: data.col})
+                    rooms[roomid].disabled.push(socket.id)
+                    setTimeout(function () {
+                        rooms[roomid].disabled.splice(rooms[roomid].disabled.indexOf(socket.id), 1)
+                    }, 5000)
+                }
+            })
+            socket.on("disconnecting", function () {
+                let roomid = socket.handshake.session.roomid;
+                if (socket.handshake.session.playerid)
+                    io.to(roomid).emit("playerLeave", {name: players[socket.handshake.session.playerid].name})
+            })
         })
-    })
-}]
+    }]

@@ -12,108 +12,131 @@
         -moz-appearance: textfield;
     }
 
+    .scoreboard {
+        top: 15%;
+        left: 65%;
+        position: absolute;
+    }
+
 </style>
-<div class="container text-center justify-content-md-center">
-    <h6 id="name"><%- name %></h6>
-    <p>Don't forget to hit enter to submit your number</p>
-    <p class="text-danger"><%- flash.error %></p>
-    <table class="table-bordered position-relative start-50 translate-middle-x">
-        <% for (let i = 0; i < 9; i++) { %>
-            <%- i !== 0 && i % 3 === 0 ? `<tr class=\"bg-dark\"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>` : null %>
-            <tr class="">
-                <% for (let j = 0; j < 9; j++) { %>
-                    <%- j !== 0 && j % 3 === 0 ? "<td class=\"bg-dark\"></td>" : null %>
-                    <td class="">
-                        <input class="text-center" type="number" min="1" max="9"
-                               id="<%- `${i}-${j}` %>"<%- board[i][j] !== 0 ? `value=\"${board[i][j]}\" disabled` : null %>>
-                    </td>
-                <% } %>
-            </tr>
-        <% } %>
-    </table>
-    <br>
-    <form action="/sudoku/join" method="post">
-        <label for="codeField">Join room:</label>
-        <input type="text" placeholder="Room code" id="codeField" name="roomid">
-    </form>
-    <br>
-    <p>Your room code: <b id="code"><%- code %></b></p>
-    <button id="copy" class="btn btn-outline-dark">Copy link</button>
-    <br>
-    <br>
-    <form action="/sudoku/new" method="post">
-        <input type="submit" value="New Game" class="btn btn-outline-dark">
-    </form>
-    <br>
+<div class="container">
+    <div class="justify-content-md-center text-center">
+        <h6 id="name"><%- name %></h6>
+        <p>Don't forget to hit enter to submit your number</p>
+        <p class="text-danger"><%- flash.error %></p>
+        <table class="table-bordered position-relative start-50 translate-middle-x">
+            <% for (let i = 0; i < 9; i++) { %>
+                <%- i !== 0 && i % 3 === 0 ? `<tr class=\"bg-dark\"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>` : null %>
+                <tr class="">
+                    <% for (let j = 0; j < 9; j++) { %>
+                        <%- j !== 0 && j % 3 === 0 ? "<td class=\"bg-dark\"></td>" : null %>
+                        <td class="">
+                            <input class="text-center" type="number" min="1" max="9"
+                                   id="<%- `${i}-${j}` %>"<%- board[i][j] !== 0 ? `value=\"${board[i][j]}\" disabled` : null %>>
+                        </td>
+                    <% } %>
+                </tr>
+            <% } %>
+        </table>
+        <br>
+        <form action="/sudoku/join" method="post">
+            <label for="codeField">Join room:</label>
+            <input type="text" placeholder="Room code" id="codeField" name="roomid">
+        </form>
+        <br>
+        <p>Your room code: <b id="code"><%- code %></b></p>
+        <button id="copy" class="btn btn-outline-dark">Copy link</button>
+        <br>
+        <br>
+        <form action="/sudoku/new" method="post">
+            <input type="submit" value="New Game" class="btn btn-outline-dark">
+        </form>
+        <br>
+        <ul id="scoreboard" class="scoreboard">
+            <% for (let player of players) { %>
+                <li id="<%-player.name%>"><%- `${player.name}: ${player.points}` %></li>
+            <% } %>
+        </ul>
+    </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-        crossorigin="anonymous"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script>
-    var socket = io();
-    var disabled = false;
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+            crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        var disabled = false;
 
-    $(document).ready(function () {
-        socket.emit("join")
-    })
-
-    function enable(field) {
-        field.removeClass("bg-danger")
-        disabled = false;
-    }
-
-    function disable(field) {
-        field.val(null)
-        disabled = true;
-        field.addClass("bg-danger")
-    }
-
-    socket.on("win", function (data) {
-        $("td").each(function () {
-            if ($(this).attr("class") !== "bg-dark" && $(this).parent().attr("class") !== "bg-dark") {
-                if ($("#name").text() === data.name)
-                    $(this).addClass("bg-success")
-                else
-                    $(this).addClass("bg-danger")
-            }
+        $(document).ready(function () {
+            socket.emit("join")
         })
-        alert(`${data.name} has won with ${data.points} points`)
-    })
 
-    socket.on("update", function (data) {
-        let field = $(`#${data.row}-${data.col}`)
-        field.val(parseInt(data.number))
-        field.prop("disabled", true)
-        data.self ? field.addClass("text-success") : field.addClass("text-danger")
-    })
-
-    socket.on("fail", function (data) {
-        let field = $(`#${data.row}-${data.col}`)
-        disable(field)
-        setTimeout(() => {
-            enable(field)
-        }, 5000)
-    })
-
-    $("input[type=number]").on('keypress', function (e) {
-        if (e.key === "Enter" && !disabled) {
-            socket.emit("submit", {
-                row: $(this).prop("id").slice(0, 1),
-                col: $(this).prop("id").slice(2),
-                number: $(this).val()
-            })
-            $(this).val(null)
+        function enable(field) {
+            field.removeClass("bg-danger")
+            disabled = false;
         }
-    });
-    $("#copy").click(function () {
-        let text = $("#code").text();
-        var data = [new ClipboardItem({"text/plain": new Blob([window.location.href + "?room=" + text], {type: "text/plain"})})];
-        navigator.clipboard.write(data).then(function () {
-            console.log("Copied to clipboard successfully!");
-        }, function () {
-            console.error("Unable to write to clipboard. :-(");
+
+        function disable(field) {
+            field.val(null)
+            disabled = true;
+            field.addClass("bg-danger")
+        }
+
+        socket.on("win", function (data) {
+            $("td").each(function () {
+                if ($(this).attr("class") !== "bg-dark" && $(this).parent().attr("class") !== "bg-dark") {
+                    if ($("#name").text() === data.name)
+                        $(this).addClass("bg-success")
+                    else
+                        $(this).addClass("bg-danger")
+                }
+            })
+            alert(`${data.name} has won with ${data.points} points`)
+        })
+
+        socket.on("update", function (data) {
+            let field = $(`#${data.row}-${data.col}`)
+            field.val(parseInt(data.number))
+            field.prop("disabled", true)
+            data.self ? field.addClass("text-success") : field.addClass("text-danger")
+            $(`#${data.name}`).text(`${data.name}: ${data.points}`)
+        })
+
+        socket.on("fail", function (data) {
+            let field = $(`#${data.row}-${data.col}`)
+            disable(field)
+            setTimeout(() => {
+                enable(field)
+            }, 5000)
+        })
+
+        socket.on("playerJoin", function (data) {
+            $("#scoreboard").append(`<li id=\"${data.name}\">${data.name}: ${data.points}</li>`)
+        })
+
+        socket.on("playerLeave", function (data) {
+            console.log(data)
+            $(`#${data.name}`).remove()
+        })
+
+        $("input[type=number]").on('keypress', function (e) {
+            if (e.key === "Enter" && !disabled) {
+                socket.emit("submit", {
+                    row: $(this).prop("id").slice(0, 1),
+                    col: $(this).prop("id").slice(2),
+                    number: $(this).val()
+                })
+                $(this).val(null)
+            }
         });
-    })
-</script>
+        $("#copy").click(function () {
+            let text = $("#code").text();
+            var data = [new ClipboardItem({"text/plain": new Blob([window.location.href + "?room=" + text], {type: "text/plain"})})];
+            navigator.clipboard.write(data).then(function () {
+                console.log("Copied to clipboard successfully!");
+            }, function () {
+                console.error("Unable to write to clipboard. :-(");
+            });
+        })
+    </script>
 <%- include("../partials/footer") %>
