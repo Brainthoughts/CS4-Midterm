@@ -1,17 +1,28 @@
 <br>
-<div class="w-25 position-relative top-50 start-50 translate-middle">
+<div class="w-25 position-relative start-50 translate-middle-x justify-content-md-center text-center">
     <form id="challengeForm">
         <div class="mb-3">
             <input type="text" class="form-control" id="flag" name="flag" placeholder="Type the solution here">
-            <div id="hint" class="text-danger text-center"><%- flash.error %></div>
+            <div id="hint" class="text-danger text-center">
+                <%- flash.error %>
+            </div>
         </div>
     </form>
+    <% if (challenges[currentChallenge].completed) { %>
+        <button class="btn btn-outline-dark" id="nextButton">Next level</button>
+    <% } %>
 </div>
 <script>
     let challengeForm = $("#challengeForm");
-    $("#challengeForm").submit(function(e){
+    $("#challengeForm").submit(function (e) {
         e.preventDefault();
         eval($("#flag").val())
+        location.reload()
     });
+
+    $("#nextButton").click(function () {
+        <% console.log(challenges)%>
+        location.assign(`/challenge/<%- challenges[currentChallenge+1].url %>`)
+    })
 
 </script>

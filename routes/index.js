@@ -19,10 +19,10 @@ router.get("/admin", function (req, res) {
                 level.completed = true;
                 level.playable = true;
             }
-            for (let challenge of req.session.challenges) {
-                challenge.completed = true;
-                challenge.playable = true;
-            }
+            // for (let challenge of req.session.challenges) {
+            //     challenge.completed = true;
+            //     challenge.playable = true;
+            // }
         } else {
             req.session.admin = false
             req.session.challenge = false;
