@@ -10,7 +10,7 @@
     let typed = ""
     $(document).keypress(function (e) {
         typed += e.key;
-        if (typed.toLowerCase.includes("flag")) {
+        if (typed.toLowerCase().includes("flag")) {
             $(".flag").text("<%- levels[9].url %>")
         }
     })
