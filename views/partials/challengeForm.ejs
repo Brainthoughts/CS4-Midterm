@@ -21,7 +21,6 @@
     });
 
     $("#nextButton").click(function () {
-        <% console.log(challenges)%>
         location.assign(`/challenge/<%- challenges[currentChallenge+1].url %>`)
     })
 

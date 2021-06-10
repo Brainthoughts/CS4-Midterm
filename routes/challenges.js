@@ -20,8 +20,7 @@ router.get("/", function (req, res) {
 router.get("/coffee", function (req, res) {
     req.session.challenges[1].completed = true;
     req.session.challenges[2].playable = true;
-    res.redirect(`/challenges/${req.session.challenges[2].url}`)
-
+    res.end("Good Job, go to the next level")
 })
 
 //Challenge 2
@@ -29,8 +28,42 @@ router.post("/mates", function (req, res) {
     req.session.challenges[2].completed = true;
     req.session.challenges[3].playable = true;
     res.end("Good Job, go to the next level")
-    // res.redirect(`/level/${req.session.levels[3].url}`)
+})
 
+//Challenge 3
+router.put("/away", function (req, res) {
+    req.session.challenges[3].completed = true;
+    req.session.challenges[4].playable = true;
+    res.end("Good Job, go to the next level")
+})
+
+//Challenge 4
+router.delete("/that", function (req, res) {
+    req.session.challenges[4].completed = true;
+    req.session.challenges[5].playable = true;
+    res.end("Good Job, go to the next level")
+})
+
+//Challenge 5
+router.post("/board", function (req, res) {
+    if (Object.keys(req.body).includes("hello")) {
+        req.session.challenges[5].completed = true;
+        req.session.challenges[6].playable = true;
+        res.end("Good Job, go to the next level")
+    }
+    else
+        res.end("Try again")
+})
+
+//Challenge 6
+router.get("/icecream", function (req, res) {
+    if (req.query.want === "true") {
+        req.session.challenges[6].completed = true;
+        req.session.challenges[7].playable = true;
+        res.end("Good Job, go to the next level")
+    }
+    else
+        res.end("Try again")
 })
 
 router.get("/:url", function (req, res) {

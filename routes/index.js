@@ -19,10 +19,10 @@ router.get("/admin", function (req, res) {
                 level.completed = true;
                 level.playable = true;
             }
-            // for (let challenge of req.session.challenges) {
-            //     challenge.completed = true;
-            //     challenge.playable = true;
-            // }
+            for (let challenge of req.session.challenges) {
+                challenge.completed = true;
+                challenge.playable = true;
+            }
         } else {
             req.session.admin = false
             req.session.challenge = false;
@@ -52,7 +52,6 @@ router.get("/congratulations", function (req, res) {
             finishTime = req.session.finishTime
         }
         let timeTaken = new Date(finishTime - startTime);
-        console.log(timeTaken)
         res.locals.hours = timeTaken.getUTCHours();
         res.locals.minutes = timeTaken.getUTCMinutes();
         res.locals.seconds = timeTaken.getUTCSeconds();
