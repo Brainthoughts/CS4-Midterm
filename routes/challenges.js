@@ -1,8 +1,8 @@
 const express = require("express"),
     router = express.Router()
 
-router.use(function (req,res,next) {
-    if (req.session.challenge){
+router.use(function (req, res, next) {
+    if (req.session.challenge) {
         next();
     } else {
         res.redirect("/")
@@ -50,8 +50,7 @@ router.post("/board", function (req, res) {
         req.session.challenges[5].completed = true;
         req.session.challenges[6].playable = true;
         res.end("Good Job, go to the next level")
-    }
-    else
+    } else
         res.end("Try again")
 })
 
@@ -61,8 +60,37 @@ router.get("/icecream", function (req, res) {
         req.session.challenges[6].completed = true;
         req.session.challenges[7].playable = true;
         res.end("Good Job, go to the next level")
-    }
-    else
+    } else
+        res.end("Try again")
+})
+
+//Challenge 7
+router.get("/fefifofum", function (req, res) {
+    res.json({secret: "goldenegg"})
+})
+
+router.post("/jack", function (req, res) {
+    if (req.body.secret === "goldenegg") {
+        console.log("ch7")
+        req.session.challenges[7].completed = true;
+        req.session.challenges[8].playable = true;
+        res.end("Good Job, go to the next level")
+    } else
+        res.end("Try again")
+})
+
+//Challenge 8
+router.get("/alice", function (req, res) {
+    res.json({foe: "jabberwocky"})
+})
+
+router.delete("/jabberwocky", function (req, res) {
+    if (req.body.weapon === "Vorpal Sword") {
+        console.log("ch8")
+        req.session.challenges[8].completed = true;
+        req.session.challenges[9].playable = true;
+        res.end("Good Job, go to the next level")
+    } else
         res.end("Try again")
 })
 

@@ -4,79 +4,77 @@ const challenges = [
         playable: true,
         url: null,
         id: null,
-        hint: "GET /challenge using jQuery"
+        solution: "$.get(\"/challenge\")"
     },
     {
         completed: false,
         playable: false,
         url: false,
         id: null,
-        hint: "<b>Lower</b> your expectations"
+        solution: "$.get(\"/challenge/coffee\")"
     },
     {
         completed: false,
         playable: false,
         url: null,
         id: null,
-        hint: "Between the i's"
+        solution: "$.post(\"/challenge/mates\")"
     },
     {
         completed: false,
         playable: false,
         url: null,
         id: null,
-        hint: "It grows",
-        answer: "plant"
+        solution: "$.ajax(\"/challenge/away\",{method: \"PUT\"})"
     },
     {
         completed: false,
         playable: false,
         url: null,
         id: null,
-        hint: "Touch me"
+        solution: "$.ajax(\"/challenge/that\",{method: \"DELETE\"})"
     },
     {
         completed: false,
         playable: false,
         url: null,
         id: null,
-        hint: "Click click"
+        solution: "$.post(\"/challenge/board\", \"hello\")"
     },
     {
         completed: false,
         playable: false,
         url: null,
         id: null,
-        hint: "Camouflage"
+        solution: "$.get(\"/challenge/icecream\", {want: true})"
     },
     {
         completed: false,
         playable: false,
         url: null,
         id: null,
-        hint: "Find \"Treasure\""
+        solution: "$.get(\"/challenge/fefifofum\", function(data){$.post(\"/challenge/jack\", data)})"
     },
     {
         completed: false,
         playable: false,
         url: null,
         id: null,
-        hint: "Type it"
+        solution: "$.get(\"/challenge/alice\", function (data){$.ajax(`/challenge/${data.foe}`, {method: \"DELETE\", data: {weapon: \"Vorpal Sword\"}})})"
     },
     {
         completed: false,
         playable: false,
         url: null,
         id: null,
-        hint: "Look at the clock"
+        solution: ""
     },
     {
         completed: false,
         playable: false,
         url: null,
         id: null,
-        hint: "Inspect deeper",
-        flag: null
+        solution: ""
     },
 ]
 
