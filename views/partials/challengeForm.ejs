@@ -21,7 +21,7 @@
     });
 
     $("#nextButton").click(function () {
-        location.assign(`/challenge/<%- challenges[currentChallenge+1].url %>`)
+        location.assign(<%- currentChallenge < 10 ? `\"/challenge/${challenges[currentChallenge+1].url}\"` : `\"/challenge/congratulations\"`%>)
     })
 
 </script>

@@ -70,7 +70,7 @@ router.get("/fefifofum", function (req, res) {
 })
 
 router.post("/jack", function (req, res) {
-    if (req.body.secret === "goldenegg") {
+    if (req.body.secret === "goldenegg" || Object.keys(req.body).includes("goldenegg")) {
         console.log("ch7")
         req.session.challenges[7].completed = true;
         req.session.challenges[8].playable = true;
@@ -92,6 +92,41 @@ router.delete("/jabberwocky", function (req, res) {
         res.end("Good Job, go to the next level")
     } else
         res.end("Try again")
+})
+
+
+//Challenge 9
+router.get("/tower", function (req, res) {
+    if (req.query.rope === "hair")
+        res.json({princess: "Rapunzel"})
+    else
+        res.end("Try again")
+})
+
+router.put("/horse", function (req, res) {
+    if (req.body.princess === "Rapunzel" || Object.keys(req.body).includes("Rapunzel")) {
+        console.log("ch9")
+        req.session.challenges[9].completed = true;
+        req.session.challenges[10].playable = true;
+        res.end("Good Job, go to the next level")
+    } else
+        res.end("Try again")
+})
+
+//Challenge 10
+router.put("/homestretch", function (req, res) {
+    res.json({url: "https://bit.ly/2TvkOVm"})
+    req.session.challenges[10].completed = true;
+
+})
+
+router.get("/congratulations", function (req, res) {
+    if (req.session.challenges[req.session.challenges.length - 1].completed) {
+        res.render("challenges/congratulations")
+    }
+    else {
+        res.redirect("/")
+    }
 })
 
 router.get("/:url", function (req, res) {

@@ -67,14 +67,14 @@ const challenges = [
         playable: false,
         url: null,
         id: null,
-        solution: ""
+        solution: "$.get(\"/challenge/tower\", {rope: \"hair\"}, function (data){$.ajax(\"/challenge/horse\", {data: {princess: data.princess}, method: \"PUT\"})})"
     },
     {
         completed: false,
         playable: false,
         url: null,
         id: null,
-        solution: ""
+        solution: "$.ajax(\"/challenge/homestretch\", {method: \"PUT\", success: function (data){location.assign(data.url)}})"
     },
 ]
 
